@@ -1,0 +1,18 @@
+volumes:
+  db:
+  
+services:
+  db:
+    container_name: postgres
+    image: postgres:15.13-alpine3.20
+    environment:
+      POSTGRES_USER: sandbox
+      POSTGRES_PASSWORD: sandbox
+      POSTGRES_DB: hotel_reservation_db
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5332:5432"
+networks:
+  db:
+    driver: bridge
