@@ -20,7 +20,7 @@ Os membros do grupo são:
 
 - [Informações do Projeto](#🏨-sistema-de-reserva-de-hotéis)  
   - [Participantes](#👥-participantes)  
-- [Estrutura do Documento](#estrutura-do-documento)  
+- [Como executar](#como-executar)
 - [Introdução](#introdução)  
   - [Problema](#problema)  
   - [Objetivos](#objetivos)  
@@ -62,6 +62,69 @@ Desenvolver um sistema web orientado a objetos que permita a reserva de hotéis 
 ## Justificativa
 
 Este projeto visa resolver um problema comum e prático, oferecendo uma solução moderna, didática e tecnicamente adequada para reservas hoteleiras. Além disso, proporciona o aprofundamento nos conceitos de POO e tecnologias como .NET e Docker, atendendo aos objetivos da disciplina de forma prática e aplicada.
+
+---
+
+# Como executar
+
+Este projeto utiliza **C# com .NET** no backend e **Docker** apenas para o banco de dados.
+
+
+## 1. Clone o repositório
+
+```bash
+git clone [https://github.com/seu-usuario/seu-projeto.git](https://github.com/MathHRM/puc-poo-hotel-reservation)
+cd puc-poo-hotel-reservation
+````
+
+
+## 2. Suba o banco de dados com Docker
+
+Certifique-se de que o Docker esteja instalado e em execução.
+
+> Docker Desktop: [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+
+Execute:
+
+```bash
+docker-compose up -d
+```
+
+
+## 3. ⚙️ Configure a string de conexão
+
+No projeto backend (C#), edite o arquivo `appsettings.json` apontar para o banco de dados.
+
+Exemplo (PostgreSQL):
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Host=sandbox;Port=5432;Database=sandbox;Username=sandbox;Password=sandbox"
+}
+````
+
+
+## 4. Execute o backend
+
+Navegue até a pasta do projeto e execute:
+
+```bash
+cd backend
+dotnet run
+```
+
+
+## 5. Acesse a aplicação
+
+Após iniciar o backend, abra o navegador e acesse:
+
+```bash
+https://localhost:7239
+ou
+http://localhost:5101
+```
+
+*(Ou a porta definida no `launchSettings.json`)*
 
 ---
 
@@ -107,7 +170,6 @@ O sistema é composto por duas interfaces: uma para **usuários finais** (client
 - **PostgreSQL** – Banco de dados relacional
 - **HTML/CSS/JS** – Interface web
 - **Bootstrap** – Estilização
-- **Replit / VS Code** – Ambiente de desenvolvimento
 
 ## Arquitetura da Solução
 
