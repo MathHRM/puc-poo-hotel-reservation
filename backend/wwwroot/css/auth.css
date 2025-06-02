@@ -1,0 +1,94 @@
+/* body {
+    font-family: 'Inter', 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+    color: #333; 
+    box-sizing: border-box;
+}
+ */
+
+.form-container {
+    background-color: #ffffff;
+    padding: 30px 40px; 
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 480px; 
+    height: 80%;
+    box-sizing: border-box; 
+}
+
+
+.form-container h2 {
+    text-align: center;
+    color: #2c3e50; 
+    margin-bottom: 30px;
+    font-size: 1.8em; 
+    font-weight: 600; 
+}
+
+
+.form-group {
+    margin-bottom: 20px; 
+}
+
+.form-group label {
+    display: block; 
+    margin-bottom: 8px;
+    color: #555; 
+    font-size: 0.95em;
+    font-weight: 500; 
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px; /* Espaçamento interno do campo */
+    border: 1px solid #ced4da; /* Borda sutil */
+    border-radius: 8px; /* Bordas arredondadas para os campos */
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #495057; /* Cor do texto dentro do campo */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Transições suaves */
+}
+
+/* Estilo do campo quando em foco */
+.form-group input:focus {
+    outline: none; /* Remove o contorno padrão */
+    border-color: #007bff; /* Cor da borda ao focar */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra ao focar, similar ao Bootstrap */
+}
+
+/* Botão de envio */
+.btn-submit {
+    background-color: #007bff; /* Cor de fundo azul */
+    color: white; /* Texto branco */
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 500;
+    width: 100%; /* Botão ocupa toda a largura */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+    margin-top: 10px; /* Espaço acima do botão */
+}
+
+.btn-submit:hover {
+    background-color: #0056b3; /* Cor mais escura ao passar o mouse */
+}
+
+.btn-submit:active {
+    transform: scale(0.99); /* Efeito de clique */
+}
+
+/* Mensagem de erro (opcional, para validação com JS) */
+.error-message {
+    color: #dc3545; /* Vermelho para erros */
+    font-size: 0.85em;
+    margin-top: 5px;
+}
