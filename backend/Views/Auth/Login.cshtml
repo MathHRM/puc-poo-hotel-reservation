@@ -1,3 +1,54 @@
 @{
     ViewData["Title"] = "Login";
 }
+
+<head>
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true">
+</head>
+
+
+<body>
+    <div class="container d-flex align-items-center justify-content-center ">
+        <div class="card-registration-wrapper row w-100">
+        
+            <div class="col-md-6 p-0 img-column">
+                <img src="~/assets/Sofa.jpeg" alt="Imagem decorativa" class="img-fluid h-100">
+            </div>
+
+            <div class="col-md-6 d-flex align-items-center">
+                <div class="form-column-content w-100 px-4">
+
+                    <div class="text-center mb-4">
+                        <img src="~/assets/LogoSite.jpeg" alt="Logo" id="logo" class="img-fluid"
+                            style="max-width: 200px;">
+                    </div>
+
+                    <div class="form-container">
+                        <h2>Acessar Conta</h2>
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="email">E-mail</label>
+                                <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="senha">Senha</label>
+                                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+                            </div>
+
+                            <button type="submit" class="btn-submit">Entrar</button>
+
+                            <div class="form-links mt-3">
+                                <a href="#">Esqueci minha senha</a>
+                                <span class="mx-2">|</span>
+                                <a asp-controller="Auth" asp-action="Register">Criar uma conta</a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
