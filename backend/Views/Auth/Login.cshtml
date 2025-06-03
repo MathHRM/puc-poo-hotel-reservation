@@ -1,3 +1,32 @@
 @{
     ViewData["Title"] = "Login";
 }
+<head>
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true">
+</head>
+
+<div class="form-container">
+        <h2>Acessar Conta</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" required>
+            </div>
+
+            
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+            </div>
+
+            
+            <button type="submit" class="btn-submit">Entrar</button>
+
+           
+            <div class="form-links">
+                <a href="#" >Esqueci minha senha</a>
+                <span>|</span>
+                <a asp-controller="Auth" asp-action="Register">Criar uma conta</a>
+            </div>
+        </form>
+    </div>
