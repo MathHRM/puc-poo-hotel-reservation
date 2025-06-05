@@ -7,9 +7,9 @@
     max-width: 480px;
     box-sizing: border-box;
     margin: 0 auto;
+    height: 100%;
 }
 
-/* Título do formulário */
 .form-container h2 {
     text-align: center;
     color: #2c3e50;
@@ -18,7 +18,6 @@
     font-weight: 600;
 }
 
-/* Grupo de formulário (rótulo + campo de entrada) - Iguais ao formulário de registro */
 .form-group {
     margin-bottom: 20px;
 }
@@ -42,14 +41,13 @@
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-/* Estilo do campo quando em foco - Iguais ao formulário de registro */
 .form-group input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Botão de envio - Iguais ao formulário de registro */
+
 .btn-submit {
     background-color: #EBB948;;
     color: white;
@@ -72,7 +70,7 @@
     transform: scale(0.99);
 }
 
-/* Link para "Esqueci minha senha" e "Criar conta" */
+
 .form-links {
     text-align: center;
     margin-top: 20px;
@@ -91,5 +89,3 @@
     text-decoration: underline;
 }
 
-
-/* Ajustes para telas menores (responsividade) - Iguais ao formulário de registro */

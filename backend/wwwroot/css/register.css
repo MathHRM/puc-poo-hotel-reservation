@@ -1,4 +1,3 @@
-
 .form-container {
     background-color: #ffffff;
     padding: 30px 40px; 
@@ -10,7 +9,6 @@
     height: 100%;
     box-sizing: border-box; 
 }
-
 
 .form-container h2 {
     text-align: center;
@@ -35,55 +33,49 @@
 
 .form-group input {
     width: 100%;
-    padding: 12px 15px; /* Espaçamento interno do campo */
-    border: 1px solid #ced4da; /* Borda sutil */
-    border-radius: 8px; /* Bordas arredondadas para os campos */
+    padding: 12px 15px; 
+    border: 1px solid #ced4da; 
+    border-radius: 8px; 
     box-sizing: border-box;
     font-size: 1em;
-    color: #495057; /* Cor do texto dentro do campo */
-    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Transições suaves */
+    color: #495057;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-/* Estilo do campo quando em foco */
 .form-group input:focus {
-    outline: none; /* Remove o contorno padrão */
-    border-color: #007bff; /* Cor da borda ao focar */
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra ao focar, similar ao Bootstrap */
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); 
 }
 
-/* Botão de envio */
 .btn-submit {
-    background-color: #EBB948; /* Cor de fundo azul */
-    color: white; /* Texto branco */
+    background-color: #EBB948; 
+    color: white;
     padding: 12px 20px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1.1em;
     font-weight: 500;
-    width: 100%; /* Botão ocupa toda a largura */
+    width: 100%;
     transition: background-color 0.2s ease-in-out, transform 0.1s ease;
-    margin-top: 10px; /* Espaço acima do botão */
+    margin-top: 10px;
 }
 
 .btn-submit:hover {
-    background-color: #e7ad27; /* Cor mais escura ao passar o mouse */
+    background-color: #e7ad27;
 }
 
 .btn-submit:active {
-    transform: scale(0.99); /* Efeito de clique */
+    transform: scale(0.99);
 }
 
-/* Mensagem de erro (opcional, para validação com JS) */
 .error-message {
-    color: #dc3545; /* Vermelho para erros */
+    color: #dc3545;
     font-size: 0.85em;
     margin-top: 5px;
 }
 
 #logo{
     width: 300px;
-}
-.img-fluid{
-    width: px;
 }
