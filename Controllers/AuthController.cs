@@ -17,7 +17,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public Task<ActionResult> LogInModel([FromForm] User user)
+    public Task<ActionResult> LoginModel([FromForm] LoginFormModel user)
     {
         
     }
