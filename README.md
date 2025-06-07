@@ -12,7 +12,7 @@ Os membros do grupo são:
 - Leandro Henrique dos Santos  
 - Matheus Henrique Resende Magalhães  
 - Victor Hugo  
-- Saulo Luíz  
+- Saulo Luiz  
 
 ---
 
