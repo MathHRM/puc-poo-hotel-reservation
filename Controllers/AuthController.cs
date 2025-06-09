@@ -16,9 +16,9 @@ public class AuthController : Controller
         return View();
     }
 
-    [HttpPost]
-    public Task<ActionResult> LoginModel([FromForm] LoginFormModel user)
-    {
+    //[HttpPost]
+    //public Task<ActionResult> LoginModel([FromForm] LoginFormModel user)
+    //{
         
-    }
+    //}
 }
