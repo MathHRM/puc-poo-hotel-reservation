@@ -1,7 +1,7 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service;
+using BCrypt.Net;
 
 namespace Controllers;
 
@@ -31,7 +31,7 @@ public class AuthController : Controller
     // }
 
     [HttpPost]
-    public Task<IActionResult> Register([FromForm] LoginFormModel user)
+    public async Task<IActionResult> Register([FromForm] User user)
     {
         if (!ModelState.IsValid)
         {
@@ -40,7 +40,7 @@ public class AuthController : Controller
 
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
-        _userService.Add(user);
+        await _userService.CreateAsync(user);
         return RedirectToAction("Login");
     }
 
