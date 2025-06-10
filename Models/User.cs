@@ -15,10 +15,8 @@ namespace Models
 
         public string Email { get; set; }
 
-        public string Document { get; set; } 
-
+        public string Document { get; set; }
+        public ICollection<RoomReservation> Reservations { get; set; }
     }
 }
 
-//matheus terminar o post para auth
-//saulo vai 

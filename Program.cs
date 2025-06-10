@@ -1,3 +1,8 @@
+using backend.Models;
+using backend.Repository;
+using backend.Repository.IRepository;
+using backend.Service;
+using backend.Service.IService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -21,6 +26,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
     });
+
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+
 
 var app = builder.Build();
 

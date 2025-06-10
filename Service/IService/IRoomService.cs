@@ -1,0 +1,9 @@
+﻿using backend.Models;
+
+namespace backend.Service.IService
+{
+    public interface IRoomService
+    {
+        Task<List<RoomDetailDto>> GetRoomsDetails();
+    }
+}

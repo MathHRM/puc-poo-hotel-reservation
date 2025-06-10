@@ -4,6 +4,6 @@
     {
         public Room Room { get; set; }
       
-        public List<Period> UnavailablePeriods { get; set; }
+        public IEnumerable<Period> UnavailablePeriods { get; set; }
     }
 }
