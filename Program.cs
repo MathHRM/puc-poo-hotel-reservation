@@ -1,7 +1,6 @@
-using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +9,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo {Title = "API para reserva de hoteis", Version = "v1"});
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API para reserva de hoteis", Version = "v1" });
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
