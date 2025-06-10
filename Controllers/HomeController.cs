@@ -19,6 +19,11 @@ namespace Controllers
             return View();
         }
 
+         public IActionResult Login()
+        {
+            return View();
+        }
+
         [Authorize]
         public IActionResult Privacy()
         {

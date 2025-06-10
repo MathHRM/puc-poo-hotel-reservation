@@ -2,10 +2,19 @@
     ViewData["Title"] = "AcomodaJá";
 }
 
+<head>
+    <!-- Adicione essas linhas dentro da tag <head> do seu HTML -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</head>
+
 <script>
     const accessKey = "3DJ2NIkkCJoHUtqX47oScQx3AqDUcIAu7oz-kfNDY7Q"
     //https://api.unsplash.com/search/photos?page=1&query=hotels&per_page=9&client_id=3DJ2NIkkCJoHUtqX47oScQx3AqDUcIAu7oz-kfNDY7Q
-    async function carregarDados(){
+    async function carregarDados() {
         const resposta = await fetch("https://api.unsplash.com/photos/random?&query=hotels&count=10&client_id=3DJ2NIkkCJoHUtqX47oScQx3AqDUcIAu7oz-kfNDY7Q")
         const dados = await resposta.json();
         console.log(dados[0].urls.regular);
@@ -13,166 +22,160 @@
     }
 
     function updateCards(imageObjects) {
-            const cardImageElements = document.querySelectorAll('.results-section .card .card-img-top');
-           
-            const loopLength = Math.min(cardImageElements.length, imageObjects.length);
+        const cardImageElements = document.querySelectorAll('.results-section .card .card-img-top');
 
-            for (let i = 0; i < loopLength; i++) {
-                const imageObject = imageObjects[i];
+        const loopLength = Math.min(cardImageElements.length, imageObjects.length);
 
-                if (cardImageElements[i] && imageObject.urls && imageObject.urls.regular) {
-                    cardImageElements[i].src = imageObject.urls.regular;
-                }
+        for (let i = 0; i < loopLength; i++) {
+            const imageObject = imageObjects[i];
+
+            if (cardImageElements[i] && imageObject.urls && imageObject.urls.regular) {
+                cardImageElements[i].src = imageObject.urls.regular;
             }
         }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
-            carregarDados()
-                .then(apiResponse => {
-                    if (apiResponse.length > 0) {
-                        updateCards(apiResponse); 
-                    } else {
-                        console.log("Nenhum resultado de imagem encontrado na resposta da API.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Erro ao buscar ou processar dados da API:", error);
-                });
-        });
-
-
+        carregarDados()
+            .then(apiResponse => {
+                if (apiResponse.length > 0) {
+                    updateCards(apiResponse);
+                } else {
+                    console.log("Nenhum resultado de imagem encontrado na resposta da API.");
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao buscar ou processar dados da API:", error);
+            });
+    });
 </script>
 
 <style>
-    .card-img-top{
+    .card-img-top {
         max-height: 190px;
     }
 </style>
+
 <body>
     <div class="container">
-        
-        <div class="hotel-search-filter-container">
-            <form class="row g-3 align-items-end">
-               
-                <div class="col-lg-4 col-md-12 mb-3 mb-lg-0">
-                    <label for="destinationInput" class="form-label"><i class="fas fa-map-marker-alt"></i> Destino</label>
-                    <input type="text" class="form-control form-control-lg" id="destinationInput" placeholder="Ex: Rio de Janeiro, Hotel Copacabana">
-                </div>
-
-            
-                <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
-                    <label for="dateRangeInput" class="form-label"><i class="fas fa-calendar-alt"></i> Período da Viagem</label>
-                    <input type="text" class="form-control form-control-lg" id="dateRangeInput" placeholder="Check-in — Check-out">
-                    
-                </div>
-
-                
-                <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
-                    <label for="guestsInput" class="form-label"><i class="fas fa-users"></i> Hóspedes</label>
-                
-                    <input type="number" class="form-control form-control-lg guest-input-field" id="guestsInput" value="2" min="1" aria-label="Número de hóspedes" title="Número de hóspedes" placeholder="Nº de hóspedes">
-                </div>
-
-            
-                <div class="col-lg-2 col-md-12 d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg btn-buscar w-100"><i class="fas fa-search"></i> Buscar</button>
-                </div>
-            </form>
-        </div>
 
         <div class="results-section mt-5">
-        <h3 class="mb-4">Hoteis Disponiveis:</h3>
+            <h3 class="mb-4">Quartos Disponiveis:</h3>
             <div class="row">
-                
+
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
-                        <img src="https://placehold.co/600x400/007bff/white?text=Hotel+Alpha" class="card-img-top" alt="Imagem do Hotel Alpha">
+                        <img src="https://placehold.co/600x400/007bff/white?text=Hotel+Alpha" class="card-img-top"
+                            alt="Imagem do Hotel Alpha">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">Hotel Alpha</h5>
-                            <p class="card-text flex-grow-1">Descrição breve do Hotel Alpha, suas comodidades e localização. Perfeito para suas férias.</p>
-                            <a href="#" class="btn btn-primary mt-auto">Ver Detalhes</a>
+                            <p class="card-text flex-grow-1">Descrição breve do Hotel Alpha, suas comodidades e
+                                localização. Perfeito para suas férias.</p>
+                            <a href="#" class="btn btn-primary mt-auto" data-bs-toggle="modal"
+                                data-bs-target="#meuModal">Reservar</a>
                         </div>
                     </div>
                 </div>
-               
+
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
-                        <img src="https://placehold.co/600x400/28a745/white?text=Hotel+Beta" class="card-img-top" alt="Imagem do Hotel Beta">
+                        <img src="https://placehold.co/600x400/28a745/white?text=Hotel+Beta" class="card-img-top"
+                            alt="Imagem do Hotel Beta">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">Hotel Beta</h5>
-                            <p class="card-text flex-grow-1">Conheça o Hotel Beta, com uma vista incrível e serviços de primeira classe para toda a família.</p>
-                            <a href="#" class="btn btn-primary mt-auto">Ver Detalhes</a>
+                            <p class="card-text flex-grow-1">Conheça o Hotel Beta, com uma vista incrível e serviços de
+                                primeira classe para toda a família.</p>
+                            <a href="#" class="btn btn-primary mt-auto">Reservar</a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
-                        <img src="https://placehold.co/600x400/ffc107/black?text=Hotel+Charlie" class="card-img-top" alt="Imagem do Hotel Charlie">
+                        <img src="https://placehold.co/600x400/ffc107/black?text=Hotel+Charlie" class="card-img-top"
+                            alt="Imagem do Hotel Charlie">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">Hotel Charlie</h5>
-                            <p class="card-text flex-grow-1">O Hotel Charlie oferece conforto e economia, ideal para viajantes a negócios ou lazer.</p>
-                            <a href="#" class="btn btn-primary mt-auto">Ver Detalhes</a>
+                            <p class="card-text flex-grow-1">O Hotel Charlie oferece conforto e economia, ideal para
+                                viajantes a negócios ou lazer.</p>
+                            <a href="#" class="btn btn-primary mt-auto">Reservar</a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
-                        <img src="https://placehold.co/600x400/dc3545/white?text=Hotel+Delta" class="card-img-top" alt="Imagem do Hotel Delta">
+                        <img src="https://placehold.co/600x400/dc3545/white?text=Hotel+Delta" class="card-img-top"
+                            alt="Imagem do Hotel Delta">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">Hotel Delta</h5>
-                            <p class="card-text flex-grow-1">Descubra o charme do Hotel Delta, com sua arquitetura única e ambiente acolhedor.</p>
-                            <a href="#" class="btn btn-primary mt-auto">Ver Detalhes</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://placehold.co/600x400/17a2b8/white?text=Hotel+Echo" class="card-img-top" alt="Imagem do Hotel Echo">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">Hotel Echo</h5>
-                            <p class="card-text flex-grow-1">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                            <a href="#" class="btn btn-primary mt-auto">Ver Detalhes</a>
+                            <p class="card-text flex-grow-1">Descubra o charme do Hotel Delta, com sua arquitetura única
+                                e ambiente acolhedor.</p>
+                            <a href="#" class="btn btn-primary mt-auto">Reservar</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://placehold.co/600x400/17a2b8/white?text=Hotel+Echo" class="card-img-top" alt="Imagem do Hotel Echo">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">Hotel Echo</h5>
-                            <p class="card-text flex-grow-1">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                            <a href="#" class="btn btn-primary mt-auto">Ver Detalhes</a>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://placehold.co/600x400/17a2b8/white?text=Hotel+Echo" class="card-img-top" alt="Imagem do Hotel Echo">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">Hotel Echo</h5>
-                            <p class="card-text flex-grow-1">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                            <a href="#" class="btn btn-primary mt-auto">Ver Detalhes</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <img src="https://placehold.co/600x400/17a2b8/white?text=Hotel+Echo" class="card-img-top" alt="Imagem do Hotel Echo">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">Hotel Echo</h5>
-                            <p class="card-text flex-grow-1">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                            <a href="#" class="btn btn-primary mt-auto">Ver Detalhes</a>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="meuModal" tabindex="-1" aria-labelledby="meuModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="meuModalLabel">Formulário de Reserva</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mx-auto">
+                    <p class="text-center">Selecione as datas de check-in e check-out para a sua reserva.</p>
+
+                    <div id="calendario-range" class="mx-auto"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Salvar Reserva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        carregarDados()
+            .then(apiResponse => {
+                if (apiResponse.length > 0) {
+                    updateCards(apiResponse);
+                } else {
+                    console.log("Nenhum resultado de imagem encontrado na resposta da API.");
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao buscar ou processar dados da API:", error);
+            });
+
+        // Inicializa o calendário quando o modal abrir
+        const modal = document.getElementById('meuModal');
+        modal.addEventListener('shown.bs.modal', function () {
+            flatpickr("#calendario-range", {
+                mode: "range",
+                inline: true,
+                minDate: "today",
+                dateFormat: "d/m/Y",
+                showMonths: 2,
+                onChange: function (selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 2) {
+                        const checkin = selectedDates[0];
+                        const checkout = selectedDates[1];
+                        console.log("Check-in:", checkin);
+                        console.log("Check-out:", checkout);
+                    }
+                }
+            });
+        });
+    });
+</script>
