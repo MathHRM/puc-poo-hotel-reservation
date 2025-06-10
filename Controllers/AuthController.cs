@@ -2,16 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Service;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Controllers;
 
 public class AuthController : Controller
 {
-    private UserService _userService;
+    private readonly UserService _userService;
+    private readonly AuthService _authService;
 
-    public AuthController(UserService userService)
+    public AuthController(UserService userService, AuthService authService)
     {
         _userService = userService;
+        _authService = authService;
     }
 
     public IActionResult Register()
@@ -24,11 +28,24 @@ public class AuthController : Controller
         return View();
     }
 
-    // [HttpPost]
-    // public Task<ActionResult> LoginModel([FromForm] LoginFormModel user)
-    // {
+    [HttpPost]
+    public async Task<IActionResult> LoginModel([FromForm] LoginFormModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View("Login", model);
+        }
 
-    // }
+        var success = await _authService.LoginAsync(model);
+
+        if (!success)
+        {
+            ModelState.AddModelError(string.Empty, "Email ou senha inválidos");
+            return View("Login", model);
+        }
+
+        return RedirectToAction("Index", "Home");
+    }
 
     [HttpPost]
     public async Task<IActionResult> Register([FromForm] User user)
@@ -44,5 +61,9 @@ public class AuthController : Controller
         return RedirectToAction("Login");
     }
 
-
+    public async Task<IActionResult> Logout()
+    {
+        await _authService.LogoutAsync();
+        return RedirectToAction("Index", "Home");
+    }
 }
