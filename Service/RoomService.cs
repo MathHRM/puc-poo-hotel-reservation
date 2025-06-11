@@ -16,6 +16,11 @@ namespace backend.Service
             return await _roomRepository.GetRoomsDetails();
         }
 
+        public async Task<List<RoomReservation>> GetUserReservations(int userId)
+        {
+            return await _roomRepository.GetUserReservations(userId);
+        }
+
         public async Task ReserveRoom(ReservationFormModel reservationData)
         {
             if(reservationData.StartDate > reservationData.EndDate)

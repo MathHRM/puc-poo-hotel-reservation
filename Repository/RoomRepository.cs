@@ -66,5 +66,19 @@ namespace backend.Repository
             }
 
         }
+
+        public async Task<List<RoomReservation>> GetUserReservations(int userId)
+        {
+            try
+            {
+                return await _context.RoomReservations.Where(x => x.UserId == userId).ToListAsync();
+            }
+            catch
+            {
+                throw new DatabaseConnectionException();
+            }
+        }
+
+        
     }
 }

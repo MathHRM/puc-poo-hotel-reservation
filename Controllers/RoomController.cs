@@ -33,5 +33,14 @@ namespace backend.Controllers
             await _roomService.ReserveRoom(reservationData);
             return Ok(new { message = "Reserva realizada com sucesso!" });
         }
+
+        [ProducesResponseType(typeof(List<UserReservationDto>),StatusCodes.Status200OK)]
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> UserReservations()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Ok(await _roomService.GetUserReservations(int.Parse(userId)));
+        }
     }
 }
