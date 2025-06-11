@@ -14,9 +14,18 @@ namespace backend.Controllers
         }
 
         [ProducesResponseType(typeof(List<RoomDetailDto>), StatusCodes.Status200OK)]
+        [HttpGet]
         public async Task<IActionResult> GetRoomsDetails()
         {
             return Ok(await _roomService.GetRoomsDetails());
+        }
+
+        [ProducesResponseType( StatusCodes.Status200OK)]
+        [HttpPost]
+        public async Task<IActionResult> Reservation([FromBody] ReservationFormModel reservationData)
+        {
+            await _roomService.ReserveRoom(reservationData);
+            return Ok();
         }
     }
 }

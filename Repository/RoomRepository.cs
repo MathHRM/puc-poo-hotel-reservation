@@ -12,19 +12,59 @@ namespace backend.Repository
         {
             _context = context;
         }
+
+        public async Task<Room?> GetRoom(int roomNumber)
+        {
+            try
+            {
+                return await _context.Rooms.Where(x => x.RoomNumber == roomNumber).FirstOrDefaultAsync();
+            }
+            catch
+            {
+                throw new DatabaseConnectionException();
+            }
+        }
+
         public async Task<List<RoomDetailDto>> GetRoomsDetails()
         {
-            var roomsQuery = _context.Rooms.Select(room => new RoomDetailDto
+            try
             {
-                Room = room,
-                UnavailablePeriods = room.Reservations.Select(reservation => new Period
+                return await _context.Rooms.Select(room => new RoomDetailDto
                 {
-                    StartDate = reservation.StartDate,
-                    EndDate = reservation.EndDate
-                })
-            });
+                    Room = room,
+                    UnavailablePeriods = room.Reservations.Select(reservation => new Period
+                    {
+                        StartDate = reservation.StartDate,
+                        EndDate = reservation.EndDate
+                    })
+                }).ToListAsync();
+            }
+            catch
+            {
+                throw new DatabaseConnectionException();
+            }
+        }
 
-            return  await roomsQuery.ToListAsync();
+        public async Task ReserveRoom(ReservationFormModel reservationData)
+        {
+            var roomReservation = new RoomReservation
+            {
+                StartDate = reservationData.StartDate,
+                EndDate = reservationData.EndDate,
+                RoomId = reservationData.RoomNumber,
+                UserId = reservationData.UserId
+            };
+            try
+            {
+                await _context.RoomReservations.AddAsync(roomReservation);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                throw new DatabaseConnectionException();
+
+            }
+
         }
     }
 }

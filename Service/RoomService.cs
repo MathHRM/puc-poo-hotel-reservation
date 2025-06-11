@@ -15,5 +15,18 @@ namespace backend.Service
         {
             return await _roomRepository.GetRoomsDetails();
         }
+
+        public async Task ReserveRoom(ReservationFormModel reservationData)
+        {
+            var room = await _roomRepository.GetRoom(reservationData.RoomNumber);
+
+            if (room == null)
+                throw new Exception("Quarto para reserva inexistente!");
+
+            if (room.Reservations != null && room.Reservations.Any(x => x.HasDateConflict(reservationData)))
+                throw new Exception("O período solicitado já está reservado por outro hóspede.");
+
+            await _roomRepository.ReserveRoom(reservationData);
+        }
     }
 }

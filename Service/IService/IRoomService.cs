@@ -5,5 +5,6 @@ namespace backend.Service.IService
     public interface IRoomService
     {
         Task<List<RoomDetailDto>> GetRoomsDetails();
+        Task ReserveRoom(ReservationFormModel reservationData);
     }
 }
