@@ -11,7 +11,7 @@
 
 </head>
 
-<script>
+@* <script>
     const accessKey = "3DJ2NIkkCJoHUtqX47oScQx3AqDUcIAu7oz-kfNDY7Q"
     //https://api.unsplash.com/search/photos?page=1&query=hotels&per_page=9&client_id=3DJ2NIkkCJoHUtqX47oScQx3AqDUcIAu7oz-kfNDY7Q
     async function carregarDados() {
@@ -48,7 +48,7 @@
                 console.error("Erro ao buscar ou processar dados da API:", error);
             });
     });
-</script>
+</script> *@
 
 <style>
     .card-img-top {
@@ -145,7 +145,7 @@
 </body>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    @* document.addEventListener('DOMContentLoaded', () => {
         carregarDados()
             .then(apiResponse => {
                 if (apiResponse.length > 0) {
@@ -156,26 +156,25 @@
             })
             .catch(error => {
                 console.error("Erro ao buscar ou processar dados da API:", error);
-            });
+            }); *@
 
         // Inicializa o calendário quando o modal abrir
         const modal = document.getElementById('meuModal');
-        modal.addEventListener('shown.bs.modal', function () {
-            flatpickr("#calendario-range", {
-                mode: "range",
-                inline: true,
-                minDate: "today",
-                dateFormat: "d/m/Y",
-                showMonths: 2,
-                onChange: function (selectedDates, dateStr, instance) {
-                    if (selectedDates.length === 2) {
-                        const checkin = selectedDates[0];
-                        const checkout = selectedDates[1];
-                        console.log("Check-in:", checkin);
-                        console.log("Check-out:", checkout);
-                    }
+    modal.addEventListener('shown.bs.modal', function () {
+        flatpickr("#calendario-range", {
+            mode: "range",
+            inline: true,
+            minDate: "today",
+            dateFormat: "d/m/Y",
+            showMonths: 2,
+            onChange: function (selectedDates, dateStr, instance) {
+                if (selectedDates.length === 2) {
+                    const checkin = selectedDates[0];
+                    const checkout = selectedDates[1];
+                    console.log("Check-in:", checkin);
+                    console.log("Check-out:", checkout);
                 }
-            });
+            }
         });
     });
 </script>
