@@ -6,6 +6,7 @@ using backend.Service.IService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 
+// Register services
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
 

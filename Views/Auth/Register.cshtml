@@ -1,3 +1,4 @@
+@model Models.User
 @{
     ViewData["Title"] = "Registre-se";
 }
@@ -13,10 +14,10 @@
         <div class="card-registration-wrapper row w-100">
 
             <div class="col-md-6 p-0 img-column">
-               
+
                 <img src="~/assets/Sofa.jpeg" alt="Imagem decorativa" class="img-fluid h-100 align-items-center">
             </div>
-            
+
             <div class="col-md-6 d-flex align-items-center">
                 <div class="form-column-content w-100 px-4">
 
@@ -26,28 +27,30 @@
                     </div>
                     <div class="form-container">
                         <h2>Crie sua Conta</h2>
-                        <form id="registrationForm">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <form id="registrationForm" asp-controller="Auth" asp-action="Register" method="post">
                             <div class="form-group">
-                                <label for="nome">Nome Completo</label>
-                                <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo"
-                                    required>
+                                <label asp-for="Username">Nome de Usuário</label>
+                                <input asp-for="Username" class="form-control" placeholder="Digite seu nome de usuário" required>
+                                <span asp-validation-for="Username" class="text-danger"></span>
                             </div>
 
                             <div class="form-group">
-                                <label for="email">E-mail</label>
-                                <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+                                <label asp-for="Email">E-mail</label>
+                                <input asp-for="Email" class="form-control" placeholder="seuemail@exemplo.com" required>
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
 
                             <div class="form-group">
-                                <label for="cpf">CPF</label>
-                                <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required
-                                    pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}">
+                                <label asp-for="Password">Senha</label>
+                                <input asp-for="Password" class="form-control" placeholder="Digite sua senha" required>
+                                <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
 
                             <div class="form-group">
-                                <label for="telefone">Telefone</label>
-                                <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" required
-                                    pattern="\(\d{2}\)\s?\d{4,5}-\d{4}">
+                                <label asp-for="Document">CPF</label>
+                                <input asp-for="Document" class="form-control" placeholder="000.000.000-00" required>
+                                <span asp-validation-for="Document" class="text-danger"></span>
                             </div>
 
                             <button type="submit" class="btn-submit">Registrar</button>
@@ -59,3 +62,7 @@
     </div>
 
 </body>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
