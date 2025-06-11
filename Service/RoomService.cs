@@ -18,6 +18,9 @@ namespace backend.Service
 
         public async Task ReserveRoom(ReservationFormModel reservationData)
         {
+            if(reservationData.StartDate > reservationData.EndDate)
+                throw new Exception("Data inicio maior que data fim");
+
             var room = await _roomRepository.GetRoom(reservationData.RoomNumber);
 
             if (room == null)
