@@ -22,14 +22,13 @@ namespace Models
         [EmailAddress(ErrorMessage = "Email inválido")]
         public string Email { get; set; }
 
-<<<<<<< HEAD
-        public string Document { get; set; }
-        public ICollection<RoomReservation> Reservations { get; set; }
-=======
+       /*  public string Document { get; set; } */
+        /* public ICollection<RoomReservation> Reservations { get; set; } */
+
+
         [Required(ErrorMessage = "Documento é obrigatório")]
         [StringLength(14, MinimumLength = 11, ErrorMessage = "Documento inválido")]
         public string Document { get; set; }
->>>>>>> main
     }
 }
 
