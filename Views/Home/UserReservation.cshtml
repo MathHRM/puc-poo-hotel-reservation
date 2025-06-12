@@ -1,3 +1,43 @@
+
 @{
     ViewData["Title"] = "Minhas Reservas";
+}
+
+@if (Model != null)
+{
+    <div class="row">
+
+        @{
+            int count = 1;
+        }
+        @foreach (var reserva in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4"> @* Define o tamanho do card em diferentes telas *@
+                <div class="card h-100">
+                    <div class="card-header">
+                        <strong>Reserva @count</strong>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Número do quarto: @reserva.RoomId</h5>
+                        <p class="card-text">
+                            <strong>Check-in:</strong> @reserva.StartDate.ToString("d 'de' MMMM 'de' yyyy")
+                            <br>
+                            <strong>Check-out:</strong> @reserva.EndDate.ToString("d 'de' MMMM 'de' yyyy")
+                        </p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a asp-action="Detalhes" asp-controller="Reservation" asp-route-id="@reserva.RoomReservationId" class="btn btn-primary">Editar Reserva</a>
+                         <a asp-action="Detalhes" asp-controller="Reservation" asp-route-id="@reserva.RoomReservationId" class="btn btn-danger">Excluir Reserva</a>
+                    </div>
+                </div>
+            </div>
+            count++;
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        Você ainda não possui nenhuma reserva.
+    </div>
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.Service.IService;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using backend.Models;
 
@@ -27,8 +28,12 @@ namespace Controllers
             return View(roomsDetails);
         }
 
-         public IActionResult Login()
+        public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -39,9 +44,12 @@ namespace Controllers
         }
 
         [Authorize]
-        public IActionResult UserReservation()
+        public async Task<IActionResult> UserReservation()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<RoomReservation> roomsReservations = await _roomService.GetUserReservations(int.Parse(userId));
+
+            return View(roomsReservations);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
