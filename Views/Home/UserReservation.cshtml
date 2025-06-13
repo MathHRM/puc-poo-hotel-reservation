@@ -80,7 +80,6 @@
 
 <script>
     async function deleteReservation(reservationId) {
-
         if (!confirm("Tem certeza que deseja excluir esta reserva?")) return;
 
         try {
@@ -115,25 +114,18 @@
 
         currentRoomNumber = button.getAttribute('data-room-number');
         const unavailablePeriodsJson = button.getAttribute('data-unavailable-periods');
-        console.log(unavailablePeriodsJson);
 
         const unavailablePeriods = JSON.parse(unavailablePeriodsJson);
-        console.log(unavailablePeriodsJson);
+        modalTitle.textContent = `Editar reserva do Quarto ${currentRoomNumber}`;
 
-        modalTitle.textContent = `Reserva para o Quarto ${currentRoomNumber}`;
-
-        const datasBloqueadas = [
-            {
-                from: unavailablePeriods.startDate,
-                to: unavailablePeriods.endDate
-            }
-        ];
+        const datasBloqueadas = [{
+            from: unavailablePeriods.startDate,
+            to: unavailablePeriods.endDate
+        }];
 
         if (calendarioInstancia) {
             calendarioInstancia.destroy();
         }
-
-        console.log("Datas bloqueadas para este quarto:", datasBloqueadas);
 
         calendarioInstancia = flatpickr("#calendario-range", {
             mode: "range",
@@ -148,18 +140,51 @@
                     checkinDate = date[0];
                     checkoutDate = date[1];
                     btnSalvarReserva.disabled = false;
-                    console.log(`Reserva para o quarto ${currentRoomNumber}:`);
-                    console.log("Check-in:", checkinDate);
-                    console.log("Check-out:", checkoutDate);
                 } else {
                     btnSalvarReserva.disabled = true;
                 }
             }
         });
+
         checkinDate = null;
         checkoutDate = null;
         btnSalvarReserva.disabled = true;
-        console.log(datasBloqueadas);
+    });
+
+    btnSalvarReserva.addEventListener('click', async function () {
+        const reservationData = {
+            RoomNumber: parseInt(currentRoomNumber),
+            StartDate: checkinDate,
+            EndDate: checkoutDate
+        };
+
+        btnSalvarReserva.disabled = true;
+        btnSalvarReserva.textContent = 'Salvando...';
+
+        try {
+            const response = await fetch('/Room/UserReservationUpdate', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reservationData)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message);
+                location.reload();
+            } else {
+                const errorResult = await response.json();
+                alert(`Erro ao atualizar: ${errorResult.message || 'Erro desconhecido.'}`);
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+            alert('Erro ao conectar com o servidor.');
+        } finally {
+            btnSalvarReserva.disabled = false;
+            btnSalvarReserva.textContent = 'Salvar Reserva';
+        }
     });
 
 </script>
