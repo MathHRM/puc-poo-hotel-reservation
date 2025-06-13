@@ -1,7 +1,11 @@
-using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
+using backend.Models;
+using backend.Repository;
+using backend.Repository.IRepository;
+using backend.Service;
+using backend.Service.IService;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +15,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo {Title = "API para reserva de hoteis", Version = "v1"});
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API para reserva de hoteis", Version = "v1" });
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -22,6 +27,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
     });
+
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 
 // Register services
 builder.Services.AddHttpContextAccessor();
@@ -57,6 +65,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Login}/{id?}");
 
 app.Run();
