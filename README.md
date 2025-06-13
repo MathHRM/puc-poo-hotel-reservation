@@ -17,7 +17,7 @@ Os membros do grupo são:
 
 ## 📚 Estrutura do Documento
 
-- [Informações do Projeto](#🏨-sistema-de-reserva-de-hotéis)  Add commentMore actions
+- [Informações do Projeto](#🏨-sistema-de-reserva-de-hotéis)
   - [Participantes](#👥-participantes)  
 - [Estrutura do Documento](#estrutura-do-documento)  
 - [Introdução](#introdução)  
