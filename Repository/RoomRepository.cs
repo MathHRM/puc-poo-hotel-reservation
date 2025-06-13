@@ -57,13 +57,13 @@ namespace backend.Repository
             try
             {
                 await _context.RoomReservations.AddAsync(roomReservation);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch
             {
                 throw new DatabaseConnectionException();
 
-            }
+            }   
 
         }
 
@@ -79,6 +79,29 @@ namespace backend.Repository
             }
         }
 
-        
+        public async Task<RoomReservation?> GetReservation(int reservationId)
+        {
+            try
+            {
+                return await _context.RoomReservations.Where(x => x.RoomReservationId == reservationId).FirstOrDefaultAsync();
+            }
+            catch
+            {
+                throw new DatabaseConnectionException();
+            }
+        }
+
+        public async Task DeleteReservation(RoomReservation reservation)
+        {
+            try
+            {
+                _context.RoomReservations.Remove(reservation);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new DatabaseConnectionException();
+            }
+        }
     }
 }

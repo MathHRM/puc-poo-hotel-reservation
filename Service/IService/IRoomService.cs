@@ -6,6 +6,7 @@ namespace backend.Service.IService
     {
         Task<List<RoomDetailDto>> GetRoomsDetails();
         Task<List<RoomReservation>> GetUserReservations(int userId);
+        Task DeleteUserReservation(int userId, int reservationId);
         Task ReserveRoom(ReservationFormModel reservationData);
     }
 }

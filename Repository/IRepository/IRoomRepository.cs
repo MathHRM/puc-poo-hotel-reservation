@@ -8,5 +8,7 @@ namespace backend.Repository.IRepository
         Task<Room?> GetRoom(int roomNumber);
         Task ReserveRoom(ReservationFormModel reservationData);
         Task<List<RoomReservation>> GetUserReservations(int userId);
+        Task<RoomReservation?> GetReservation(int reservationId);
+        Task DeleteReservation(RoomReservation reservation);
     }
 }

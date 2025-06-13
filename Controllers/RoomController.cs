@@ -42,5 +42,17 @@ namespace backend.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return Ok(await _roomService.GetUserReservations(int.Parse(userId)));
         }
+
+        [ProducesResponseType( StatusCodes.Status200OK)]
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUserReservation([FromRoute] int reservationId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            await _roomService.DeleteUserReservation(userId, reservationId);
+
+            return Ok();
+        }
     }
 }

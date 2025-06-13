@@ -11,6 +11,21 @@ namespace backend.Service
         {
             _roomRepository = roomRepository;
         }
+
+        public async Task DeleteUserReservation(int userId, int reservationId)
+        {
+            var reservation = await _roomRepository.GetReservation(reservationId);
+
+            if (reservation == null)
+                throw new InvalidOperationException();
+
+            if (reservation.UserId != userId)
+                throw new UnauthorizedAccessException();
+
+            await _roomRepository.DeleteReservation(reservation);
+            
+        }
+
         public async Task<List<RoomDetailDto>> GetRoomsDetails()
         {
             return await _roomRepository.GetRoomsDetails();
@@ -23,7 +38,7 @@ namespace backend.Service
 
         public async Task ReserveRoom(ReservationFormModel reservationData)
         {
-            if(reservationData.StartDate > reservationData.EndDate)
+            if (reservationData.StartDate > reservationData.EndDate)
                 throw new Exception("Data inicio maior que data fim");
 
             var room = await _roomRepository.GetRoom(reservationData.RoomNumber);
