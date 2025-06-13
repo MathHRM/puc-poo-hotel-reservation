@@ -111,6 +111,11 @@
                     const date = dateStr.split(' to ');
                     checkinDate = date[0];
                     checkoutDate = date[1];
+
+                    if (checkoutDate == null) {
+                        checkoutDate = checkinDate;                        
+                    }
+
                     btnSalvarReserva.disabled = false;
                     console.log(`Reserva para o quarto ${currentRoomNumber}:`);
                     console.log("Check-in:", checkinDate);
