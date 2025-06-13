@@ -3,6 +3,11 @@
     ViewData["Title"] = "Minhas Reservas";
 }
 
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+
 <body>
     @if (Model.Count >= 1)
     {
@@ -18,19 +23,24 @@
                     <div class="card h-100">
                         <div class="card-header">
                             <strong>Reserva @count</strong>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Número do quarto: @reserva.RoomId</h5>
-                            <p class="card-text">
-                                <strong>Check-in:</strong> @reserva.StartDate.ToString("d 'de' MMMM 'de' yyyy")
-                                <br>
-                                <strong>Check-out:</strong> @reserva.EndDate.ToString("d 'de' MMMM 'de' yyyy")
-                            </p>
-                        </div>
-                        <div class="card-footer text-center">
-                            <a href="#" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#meuModal">Editar Reserva</a>
-                            <a href="javascript:void(0)" class="btn btn-danger"
-                                onclick="deleteReservation(@reserva.RoomReservationId)"><i class="bi bi-trash3-fill"></i></a>
+                            <div class="card-body">
+                                <h5 class="card-title">Número do quarto: @reserva.RoomId</h5>
+                                <p class="card-text">
+                                    <strong>Check-in:</strong> @reserva.StartDate.ToString("d 'de' MMMM 'de' yyyy")
+                                    <br>
+                                    <strong>Check-out:</strong> @reserva.EndDate.ToString("d 'de' MMMM 'de' yyyy")
+                                </p>
+                            </div>
+                            <div class="card-footer text-center">
+                                <a href="#" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#meuModal"
+                                    data-room-number="@reserva.RoomId"
+                                    data-unavailable-periods='@Html.Raw(Json.Serialize(new { startDate = reserva.StartDate, endDate = reserva.EndDate }))'>Editar
+                                    Reserva</a>
+
+                                <a href="javascript:void(0)" class="btn btn-danger"
+                                    onclick="deleteReservation(@reserva.RoomReservationId)"><i
+                                        class="bi bi-trash3-fill"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -44,29 +54,29 @@
             Você ainda não possui nenhuma reserva.
         </div>
     }
+    </div>
+    <div class="modal fade" id="meuModal" tabindex="-1" aria-labelledby="meuModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="meuModalLabel">Editar Reserva</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mx-auto">
+                    <p class="text-center">Selecione as datas de check-in e check-out para a sua reserva.
+                    </p>
 
-
-    <div class="modal fade" id="meuModal" tabindex="-1" aria-labelledby="meuModalLabel" aria-hidden="true"></div>
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="meuModalLabel">Formulário de Reserva</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body mx-auto">
-                <p class="text-center">Selecione as datas de check-in e check-out para a sua reserva.
-                </p>
-
-                <div id="calendario-range" class="mx-auto"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" id="btnSalvarReserva" class="btn btn-primary">Salvar Reserva</button>
+                    <div id="calendario-range" class="mx-auto"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" id="btnSalvarReserva" class="btn btn-primary">Salvar Reserva</button>
+                </div>
             </div>
         </div>
     </div>
-    </div>
 </body>
+
 
 <script>
     async function deleteReservation(reservationId) {
@@ -90,4 +100,66 @@
             alert("Erro na requisição.");
         }
     }
+
+    let calendarioInstancia = null;
+    let checkinDate = null;
+    let checkoutDate = null;
+    let currentRoomNumber = null;
+
+    const modal = document.getElementById('meuModal');
+    const modalTitle = document.getElementById('meuModalLabel');
+    const btnSalvarReserva = document.getElementById('btnSalvarReserva');
+
+    modal.addEventListener('shown.bs.modal', function (event) {
+        const button = event.relatedTarget;
+
+        currentRoomNumber = button.getAttribute('data-room-number');
+        const unavailablePeriodsJson = button.getAttribute('data-unavailable-periods');
+        console.log(unavailablePeriodsJson);
+
+        const unavailablePeriods = JSON.parse(unavailablePeriodsJson);
+        console.log(unavailablePeriodsJson);
+
+        modalTitle.textContent = `Reserva para o Quarto ${currentRoomNumber}`;
+
+        const datasBloqueadas = [
+            {
+                from: unavailablePeriods.startDate,
+                to: unavailablePeriods.endDate
+            }
+        ];
+
+        if (calendarioInstancia) {
+            calendarioInstancia.destroy();
+        }
+
+        console.log("Datas bloqueadas para este quarto:", datasBloqueadas);
+
+        calendarioInstancia = flatpickr("#calendario-range", {
+            mode: "range",
+            inline: true,
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            showMonths: 2,
+            disable: datasBloqueadas,
+            onChange: function (selectedDates, dateStr, instance) {
+                if (selectedDates.length === 2) {
+                    const date = dateStr.split(' to ');
+                    checkinDate = date[0];
+                    checkoutDate = date[1];
+                    btnSalvarReserva.disabled = false;
+                    console.log(`Reserva para o quarto ${currentRoomNumber}:`);
+                    console.log("Check-in:", checkinDate);
+                    console.log("Check-out:", checkoutDate);
+                } else {
+                    btnSalvarReserva.disabled = true;
+                }
+            }
+        });
+        checkinDate = null;
+        checkoutDate = null;
+        btnSalvarReserva.disabled = true;
+        console.log(datasBloqueadas);
+    });
+
 </script>
