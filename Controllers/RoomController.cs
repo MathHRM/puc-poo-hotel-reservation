@@ -44,7 +44,8 @@ namespace backend.Controllers
         }
 
         [ProducesResponseType( StatusCodes.Status200OK)]
-        [HttpDelete("{id}")]
+        [Route("Room/DeleteUserReservation/{reservationId}")]
+        [HttpDelete("{reservationId}")]
         [Authorize]
         public async Task<IActionResult> DeleteUserReservation([FromRoute] int reservationId)
         {

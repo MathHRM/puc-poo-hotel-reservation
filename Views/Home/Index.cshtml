@@ -32,7 +32,7 @@
                                 <h5 class="card-title">Quarto número: @dto.Room.RoomNumber</h5>
                                 <p class="card-text ">@dto.Room.Description</p>
                                 <p class="card-text ">Preço diária: R$@dto.Room.Rent,00</p>
-                                <a href="#" class="btn btn-primary mt-auto" data-bs-toggle="modal"
+                                <a href="#" class="btn btn-warning mt-auto" data-bs-toggle="modal"
                                     data-bs-target="#meuModal" data-room-number="@dto.Room.RoomNumber"
                                     data-unavailable-periods='@Json.Serialize(dto.UnavailablePeriods)'>
                                     Reservar
@@ -127,8 +127,7 @@
     });
 
 
-    btnSalvarReserva.addEventListener('click', async function () {
-            
+    btnSalvarReserva.addEventListener('click', async function () { 
             const reservationData = {
                 RoomNumber: parseInt(currentRoomNumber),
                 StartDate: checkinDate,

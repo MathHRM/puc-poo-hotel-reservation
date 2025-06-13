@@ -1,43 +1,93 @@
-
+@model List<backend.Models.RoomReservation>;
 @{
     ViewData["Title"] = "Minhas Reservas";
 }
 
-@if (Model != null)
-{
-    <div class="row">
+<body>
+    @if (Model.Count >= 1)
+    {
+        <div class="row">
 
-        @{
-            int count = 1;
-        }
-        @foreach (var reserva in Model)
-        {
-            <div class="col-md-6 col-lg-4 mb-4"> @* Define o tamanho do card em diferentes telas *@
-                <div class="card h-100">
-                    <div class="card-header">
-                        <strong>Reserva @count</strong>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Número do quarto: @reserva.RoomId</h5>
-                        <p class="card-text">
-                            <strong>Check-in:</strong> @reserva.StartDate.ToString("d 'de' MMMM 'de' yyyy")
-                            <br>
-                            <strong>Check-out:</strong> @reserva.EndDate.ToString("d 'de' MMMM 'de' yyyy")
-                        </p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <a asp-action="Detalhes" asp-controller="Reservation" asp-route-id="@reserva.RoomReservationId" class="btn btn-primary">Editar Reserva</a>
-                         <a asp-action="Detalhes" asp-controller="Reservation" asp-route-id="@reserva.RoomReservationId" class="btn btn-danger">Excluir Reserva</a>
+            @{
+                int count = 1;
+            }
+            @foreach (var reserva in Model)
+            {
+                <script>console.log(@reserva.RoomReservationId)</script>
+                <div class="col-md-6 col-lg-4 mb-4"> @* Define o tamanho do card em diferentes telas *@
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <strong>Reserva @count</strong>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Número do quarto: @reserva.RoomId</h5>
+                            <p class="card-text">
+                                <strong>Check-in:</strong> @reserva.StartDate.ToString("d 'de' MMMM 'de' yyyy")
+                                <br>
+                                <strong>Check-out:</strong> @reserva.EndDate.ToString("d 'de' MMMM 'de' yyyy")
+                            </p>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="#" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#meuModal">Editar Reserva</a>
+                            <a href="javascript:void(0)" class="btn btn-danger"
+                                onclick="deleteReservation(@reserva.RoomReservationId)"><i class="bi bi-trash3-fill"></i></a>
+                        </div>
                     </div>
                 </div>
+                count++;
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            Você ainda não possui nenhuma reserva.
+        </div>
+    }
+
+
+    <div class="modal fade" id="meuModal" tabindex="-1" aria-labelledby="meuModalLabel" aria-hidden="true"></div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="meuModalLabel">Formulário de Reserva</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            count++;
+            <div class="modal-body mx-auto">
+                <p class="text-center">Selecione as datas de check-in e check-out para a sua reserva.
+                </p>
+
+                <div id="calendario-range" class="mx-auto"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" id="btnSalvarReserva" class="btn btn-primary">Salvar Reserva</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+<script>
+    async function deleteReservation(reservationId) {
+
+        if (!confirm("Tem certeza que deseja excluir esta reserva?")) return;
+
+        try {
+            const response = await fetch(`/Room/DeleteUserReservation/${reservationId}`, {
+                method: "DELETE",
+                credentials: "include"
+            });
+
+            if (response.ok) {
+                alert("Reserva excluída com sucesso!");
+                location.reload();
+            } else {
+                alert("Erro ao excluir a reserva.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Erro na requisição.");
         }
-    </div>
-}
-else
-{
-    <div class="alert alert-warning" role="alert">
-        Você ainda não possui nenhuma reserva.
-    </div>
-}
+    }
+</script>
