@@ -47,6 +47,9 @@ namespace backend.Repository
 
         public async Task ReserveRoom(RoomReservation reservation)
         {
+            reservation.StartDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+            reservation.EndDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+
             try
             {
                 await _context.RoomReservations.AddAsync(reservation);
@@ -64,7 +67,6 @@ namespace backend.Repository
             try
             {
                 return await _context.RoomReservations.Where(x => x.UserId == userId)
-                    .Include(x => x.Room)
                     .ToListAsync();
             }
             catch (DbException)
