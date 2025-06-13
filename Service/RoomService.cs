@@ -50,13 +50,13 @@ namespace backend.Service
 
         private async Task ValidateReservation(RoomReservation reservation)
         {
-            if (reservation.StartDate > reservation.EndDate)
-                throw new Exception("Data inicio maior que data fim");
+                if (reservation.StartDate > reservation.EndDate)
+                    throw new Exception("Data inicio maior que data fim");
 
-            var room = await _roomRepository.GetRoom(reservation.RoomId);
+                var room = await _roomRepository.GetRoom(reservation.RoomId);
 
-            if (room == null)
-                throw new Exception("Quarto para reserva inexistente!");
+                if (room == null)
+                    throw new Exception("Quarto para reserva inexistente!");
         }
     }
 }

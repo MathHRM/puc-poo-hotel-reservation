@@ -27,37 +27,54 @@ namespace backend.Controllers
         [Authorize]
         public async Task<IActionResult> Reservation([FromBody] ReservationFormModel reservationData)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            await _roomService.ReserveRoom(new RoomReservation
+            try
             {
-                StartDate = reservationData.StartDate,
-                EndDate = reservationData.EndDate,
-                RoomId = reservationData.RoomNumber,
-                UserId = int.Parse(userId)
-            });
-
-            return Ok(new { message = "Reserva realizada com sucesso!" });
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpPatch]
-        [Authorize]
-        public async Task<IActionResult> UserReservationUpdate([FromBody] ReservationFormModel reservationData)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            await _roomService.UpdateUserReservation(
-                new RoomReservation
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _roomService.ReserveRoom(new RoomReservation
                 {
                     StartDate = reservationData.StartDate,
                     EndDate = reservationData.EndDate,
                     RoomId = reservationData.RoomNumber,
                     UserId = int.Parse(userId)
-                }
-                );
+                });
 
-            return Ok(new { message = "Reserva atualizada com sucesso!" });
+                return Ok(new { message = "Reserva realizada com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UserReservationUpdate([FromBody] ReservationFormModel reservationData)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                await _roomService.UpdateUserReservation(
+                    new RoomReservation
+                    {
+                        StartDate = reservationData.StartDate,
+                        EndDate = reservationData.EndDate,
+                        RoomId = reservationData.RoomNumber,
+                        UserId = int.Parse(userId),
+                        RoomReservationId = reservationData.ReservationId
+                    }
+                    );
+
+                return Ok(new { message = "Reserva atualizada com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ErrorMessage = ex.Message });
+            }
         }
 
         [ProducesResponseType(typeof(List<UserReservationDto>), StatusCodes.Status200OK)]
@@ -65,8 +82,15 @@ namespace backend.Controllers
         [Authorize]
         public async Task<IActionResult> UserReservations()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Ok(await _roomService.GetUserReservations(int.Parse(userId)));
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                return Ok(await _roomService.GetUserReservations(int.Parse(userId)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ErrorMessage = ex.Message });
+            }
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -75,9 +99,15 @@ namespace backend.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteUserReservation([FromRoute] int reservationId)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-            await _roomService.DeleteUserReservation(userId, reservationId);
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                await _roomService.DeleteUserReservation(userId, reservationId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ErrorMessage = ex.Message });
+            }
 
             return Ok();
         }
