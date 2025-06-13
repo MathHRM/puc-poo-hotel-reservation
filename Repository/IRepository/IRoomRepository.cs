@@ -6,9 +6,11 @@ namespace backend.Repository.IRepository
     {
         Task<List<RoomDetailDto>> GetRoomsDetails();
         Task<Room?> GetRoom(int roomNumber);
-        Task ReserveRoom(ReservationFormModel reservationData);
+        Task ReserveRoom(RoomReservation reservationData);
         Task<List<RoomReservation>> GetUserReservations(int userId);
         Task<RoomReservation?> GetReservation(int reservationId);
         Task DeleteReservation(RoomReservation reservation);
+        Task UpdateUserReservation(RoomReservation reservation);
+
     }
 }

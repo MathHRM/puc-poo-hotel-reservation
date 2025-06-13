@@ -23,7 +23,7 @@ namespace backend.Service
                 throw new UnauthorizedAccessException();
 
             await _roomRepository.DeleteReservation(reservation);
-            
+
         }
 
         public async Task<List<RoomDetailDto>> GetRoomsDetails()
@@ -36,20 +36,30 @@ namespace backend.Service
             return await _roomRepository.GetUserReservations(userId);
         }
 
-        public async Task ReserveRoom(ReservationFormModel reservationData)
+        public async Task ReserveRoom(RoomReservation reservation)
         {
-            if (reservationData.StartDate > reservationData.EndDate)
+            ValidateReservation(reservation);
+            await _roomRepository.ReserveRoom(reservation);
+        }
+
+        public async Task UpdateUserReservation(RoomReservation reservation)
+        {
+            ValidateReservation(reservation);
+            await _roomRepository.UpdateUserReservation(reservation);
+        }
+
+        private async void ValidateReservation(RoomReservation reservation)
+        {
+            if (reservation.StartDate > reservation.EndDate)
                 throw new Exception("Data inicio maior que data fim");
 
-            var room = await _roomRepository.GetRoom(reservationData.RoomNumber);
+            var room = await _roomRepository.GetRoom(reservation.RoomId);
 
             if (room == null)
                 throw new Exception("Quarto para reserva inexistente!");
 
-            if (room.Reservations != null && room.Reservations.Any(x => x.HasDateConflict(reservationData)))
+            if (room.Reservations != null && room.Reservations.Any(x => x.HasDateConflict(reservation)))
                 throw new Exception("O período solicitado já está reservado por outro hóspede.");
-
-            await _roomRepository.ReserveRoom(reservationData);
         }
     }
 }

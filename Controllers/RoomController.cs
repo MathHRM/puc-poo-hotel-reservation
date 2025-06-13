@@ -1,8 +1,8 @@
-﻿using System.Security.Claims;
-using backend.Models;
+﻿using backend.Models;
 using backend.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -28,13 +28,39 @@ namespace backend.Controllers
         public async Task<IActionResult> Reservation([FromBody] ReservationFormModel reservationData)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            reservationData.UserId = int.Parse(userId);
-            
-            await _roomService.ReserveRoom(reservationData);
+
+            await _roomService.ReserveRoom(new RoomReservation
+            {
+                StartDate = reservationData.StartDate,
+                EndDate = reservationData.EndDate,
+                RoomId = reservationData.RoomNumber,
+                UserId = int.Parse(userId)
+            });
+
             return Ok(new { message = "Reserva realizada com sucesso!" });
         }
 
-        [ProducesResponseType(typeof(List<UserReservationDto>),StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPatch]
+        [Authorize]
+        public async Task<IActionResult> UserReservationUpdate([FromBody] ReservationFormModel reservationData)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _roomService.UpdateUserReservation(
+                new RoomReservation
+                {
+                    StartDate = reservationData.StartDate,
+                    EndDate = reservationData.EndDate,
+                    RoomId = reservationData.RoomNumber,
+                    UserId = int.Parse(userId)
+                }
+                );
+
+            return Ok(new { message = "Reserva atualizada com sucesso!" });
+        }
+
+        [ProducesResponseType(typeof(List<UserReservationDto>), StatusCodes.Status200OK)]
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> UserReservations()
@@ -43,7 +69,7 @@ namespace backend.Controllers
             return Ok(await _roomService.GetUserReservations(int.Parse(userId)));
         }
 
-        [ProducesResponseType( StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Route("Room/DeleteUserReservation/{reservationId}")]
         [HttpDelete("{reservationId}")]
         [Authorize]

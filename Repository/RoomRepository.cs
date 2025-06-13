@@ -1,7 +1,7 @@
 ﻿using backend.Models;
 using backend.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
-
+using System.Data.Common;
 
 namespace backend.Repository
 {
@@ -19,7 +19,7 @@ namespace backend.Repository
             {
                 return await _context.Rooms.Where(x => x.RoomNumber == roomNumber).FirstOrDefaultAsync();
             }
-            catch
+            catch (DbException)
             {
                 throw new DatabaseConnectionException();
             }
@@ -39,41 +39,35 @@ namespace backend.Repository
                     })
                 }).ToListAsync();
             }
-            catch
+            catch (DbException)
             {
                 throw new DatabaseConnectionException();
             }
         }
 
-        public async Task ReserveRoom(ReservationFormModel reservationData)
+        public async Task ReserveRoom(RoomReservation reservation)
         {
-            var roomReservation = new RoomReservation
-            {
-                StartDate = reservationData.StartDate,
-                EndDate = reservationData.EndDate,
-                RoomId = reservationData.RoomNumber,
-                UserId = reservationData.UserId
-            };
             try
             {
-                await _context.RoomReservations.AddAsync(roomReservation);
+                await _context.RoomReservations.AddAsync(reservation);
                 await _context.SaveChangesAsync();
             }
-            catch
+            catch (DbException)
             {
                 throw new DatabaseConnectionException();
 
-            }   
-
+            }
         }
 
         public async Task<List<RoomReservation>> GetUserReservations(int userId)
         {
             try
             {
-                return await _context.RoomReservations.Where(x => x.UserId == userId).ToListAsync();
+                return await _context.RoomReservations.Where(x => x.UserId == userId)
+                    .Include(x => x.Room)
+                    .ToListAsync();
             }
-            catch
+            catch (DbException)
             {
                 throw new DatabaseConnectionException();
             }
@@ -85,7 +79,7 @@ namespace backend.Repository
             {
                 return await _context.RoomReservations.Where(x => x.RoomReservationId == reservationId).FirstOrDefaultAsync();
             }
-            catch
+            catch (DbException)
             {
                 throw new DatabaseConnectionException();
             }
@@ -98,7 +92,28 @@ namespace backend.Repository
                 _context.RoomReservations.Remove(reservation);
                 await _context.SaveChangesAsync();
             }
-            catch
+            catch (DbException)
+            {
+                throw new DatabaseConnectionException();
+            }
+        }
+
+        public async Task UpdateUserReservation(RoomReservation reservation)
+        {
+            try
+            {
+                var oldReservation = await _context.RoomReservations.FindAsync(reservation.RoomReservationId);
+
+                if (oldReservation == null)
+                    throw new KeyNotFoundException();
+
+                oldReservation.StartDate = reservation.StartDate;
+                oldReservation.EndDate = reservation.EndDate;
+                oldReservation.RoomId = reservation.RoomId;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbException)
             {
                 throw new DatabaseConnectionException();
             }
