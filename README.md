@@ -17,23 +17,22 @@ Os membros do grupo são:
 
 ## 📚 Estrutura do Documento
 
-- [Informações do Projeto](#🏨-sistema-de-reserva-de-hotéis)
-  - [Participantes](#👥-participantes)  
-- [Estrutura do Documento](#estrutura-do-documento)  
-- [Introdução](#introdução)  
+- [Informações do Projeto](#-sistema-de-reserva-de-quartos)
+  - [Participantes](#-participantes)
+- [Introdução](#-introdução)  
   - [Problema](#problema)  
   - [Objetivos](#objetivos)  
   - [Justificativa](#justificativa)
-- [Especificações do Projeto](#especificações-do-projeto)  
+- [Especificações do Projeto](#-especificações-do-projeto)  
   - [Requisitos](#requisitos)  
-    - [Requisitos Funcionais](#requisitos-funcionais)  
-    - [Requisitos Não Funcionais](#requisitos-não-funcionais)  
-  - [Restrições](#restrições)
-- [Projeto da Solução](#projeto-da-solução)  
-  - [Tecnologias Utilizadas](#tecnologias-utilizadas)  
-  - [Arquitetura da Solução](#arquitetura-da-solução)  
-- [Licença](#📝-licença)  
-- [Referências](#referências)  
+    - [Requisitos Funcionais](#-requisitos-funcionais)  
+    - [Requisitos Não Funcionais](#-requisitos-não-funcionais)  
+  - [Restrições](#-restrições)
+- [Projeto da Solução](#-projeto-da-solução)  
+  - [Tecnologias Utilizadas](#-tecnologias-utilizadas)  
+  - [Arquitetura da Solução](#-arquitetura-da-solução)  
+- [Licença](#-licença)  
+- [Referências](#-referências)  
 
 ---
 
