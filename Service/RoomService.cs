@@ -57,9 +57,6 @@ namespace backend.Service
 
             if (room == null)
                 throw new Exception("Quarto para reserva inexistente!");
-
-            if (room.Reservations != null && room.Reservations.Any(x => x.HasDateConflict(reservation)))
-                throw new Exception("O período solicitado já está reservado por outro hóspede.");
         }
     }
 }
