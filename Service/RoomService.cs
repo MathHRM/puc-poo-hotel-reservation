@@ -38,17 +38,17 @@ namespace backend.Service
 
         public async Task ReserveRoom(RoomReservation reservation)
         {
-            ValidateReservation(reservation);
+            await ValidateReservation(reservation);
             await _roomRepository.ReserveRoom(reservation);
         }
 
         public async Task UpdateUserReservation(RoomReservation reservation)
         {
-            ValidateReservation(reservation);
+            await ValidateReservation(reservation);
             await _roomRepository.UpdateUserReservation(reservation);
         }
 
-        private async void ValidateReservation(RoomReservation reservation)
+        private async Task ValidateReservation(RoomReservation reservation)
         {
             if (reservation.StartDate > reservation.EndDate)
                 throw new Exception("Data inicio maior que data fim");
