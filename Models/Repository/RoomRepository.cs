@@ -13,11 +13,20 @@ namespace backend.Repository
             _context = context;
         }
 
-        public async Task<Room?> GetRoom(int roomNumber)
+        public async Task<RoomDetailDto?> GetRoomDetail(int roomNumber)
         {
             try
             {
-                return await _context.Rooms.Where(x => x.RoomNumber == roomNumber).FirstOrDefaultAsync();
+                return await _context.Rooms.Where(x => x.RoomNumber == roomNumber)
+                    .Select(room => new RoomDetailDto
+                    {
+                        Room = room,
+                        UnavailablePeriods = room.Reservations.Select(reservation => new Period
+                        {
+                            StartDate = reservation.StartDate,
+                            EndDate = reservation.EndDate
+                        })
+                    }).FirstOrDefaultAsync();
             }
             catch (DbException)
             {
@@ -34,8 +43,8 @@ namespace backend.Repository
                     Room = room,
                     UnavailablePeriods = room.Reservations.Select(reservation => new Period
                     {
-                        StartDate = reservation.StartDate,
-                        EndDate = reservation.EndDate
+                        StartDate = reservation.StartDate.ToLocalTime(),
+                        EndDate = reservation.EndDate.ToLocalTime()
                     })
                 }).ToListAsync();
             }
@@ -47,9 +56,6 @@ namespace backend.Repository
 
         public async Task ReserveRoom(RoomReservation reservation)
         {
-            reservation.StartDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-            reservation.EndDate.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-
             try
             {
                 await _context.RoomReservations.AddAsync(reservation);
@@ -62,12 +68,21 @@ namespace backend.Repository
             }
         }
 
-        public async Task<List<RoomReservation>> GetUserReservations(int userId)
+        public async Task<List<RoomDetailDto>> GetUserReservations(int userId)
         {
             try
             {
-                return await _context.RoomReservations.Where(x => x.UserId == userId)
-                    .ToListAsync();
+                return await _context.RoomReservations
+                    .Where(r => r.UserId == userId)
+                    .Select(reservation => new RoomDetailDto
+                    {
+                        Room = reservation.Room,
+                        UnavailablePeriods = reservation.Room.Reservations.Select(r => new Period
+                        {
+                            StartDate = r.StartDate.ToLocalTime(),
+                            EndDate = r.EndDate.ToLocalTime()
+                        })
+                    }).ToListAsync();
             }
             catch (DbException)
             {
@@ -79,7 +94,9 @@ namespace backend.Repository
         {
             try
             {
-                return await _context.RoomReservations.Where(x => x.RoomReservationId == reservationId).FirstOrDefaultAsync();
+                return await _context.RoomReservations
+                    .Where(x => x.RoomReservationId == reservationId)
+                    .FirstOrDefaultAsync();
             }
             catch (DbException)
             {

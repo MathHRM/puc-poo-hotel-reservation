@@ -25,18 +25,17 @@ namespace backend.Service
             await _roomRepository.DeleteReservation(reservation);
 
         }
-
         public async Task<List<RoomDetailDto>> GetRoomsDetails()
         {
             return await _roomRepository.GetRoomsDetails();
         }
 
-        public async Task<List<RoomReservation>> GetUserReservations(int userId)
+        public async Task<List<RoomDetailDto>> GetUserReservations(int userId)
         {
             return await _roomRepository.GetUserReservations(userId);
         }
 
-        public async Task ReserveRoom(RoomReservation reservation)
+        public async Task ReserveRoom(RoomReservation reservation)  
         {
             await ValidateReservation(reservation);
             await _roomRepository.ReserveRoom(reservation);
@@ -48,15 +47,21 @@ namespace backend.Service
             await _roomRepository.UpdateUserReservation(reservation);
         }
 
-        private async Task ValidateReservation(RoomReservation reservation)
+        private async Task ValidateReservation(RoomReservation newReservation)
         {
-                if (reservation.StartDate > reservation.EndDate)
-                    throw new Exception("Data inicio maior que data fim");
 
-                var room = await _roomRepository.GetRoom(reservation.RoomId);
+            if (newReservation.StartDate > newReservation.EndDate)
+                throw new Exception("Data inicio maior que data fim");
 
-                if (room == null)
-                    throw new Exception("Quarto para reserva inexistente!");
+            var roomDetail = await _roomRepository.GetRoomDetail(newReservation.RoomId);
+
+            if (roomDetail == null)
+                throw new Exception("Quarto para reserva inexistente!");
+
+            if (roomDetail.UnavailablePeriods
+                .Any(reservation => Period.CheckDateConflict(reservation, newReservation)))
+                throw new Exception("Data de reserva indisponível!");
+
         }
     }
 }

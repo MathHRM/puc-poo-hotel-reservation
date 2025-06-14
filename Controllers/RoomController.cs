@@ -77,7 +77,7 @@ namespace backend.Controllers
             }
         }
 
-        [ProducesResponseType(typeof(List<UserReservationDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<RoomDetailDto>), StatusCodes.Status200OK)]
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> UserReservations()
