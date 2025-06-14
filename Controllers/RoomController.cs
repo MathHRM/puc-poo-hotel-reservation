@@ -50,7 +50,7 @@ namespace backend.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpPost]
+        [HttpPatch]
         [Authorize]
         public async Task<IActionResult> UserReservationUpdate([FromBody] ReservationFormModel reservationData)
         {
@@ -103,13 +103,12 @@ namespace backend.Controllers
             {
                 var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 await _roomService.DeleteUserReservation(userId, reservationId);
+                return Ok();
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { ErrorMessage = ex.Message });
             }
-
-            return Ok();
         }
     }
 }
