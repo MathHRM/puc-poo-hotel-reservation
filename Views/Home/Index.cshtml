@@ -87,7 +87,6 @@
 
 
         const unavailablePeriods = JSON.parse(unavailablePeriodsJson);
-        console.log(unavailablePeriodsJson);
 
         const datasBloqueadas = unavailablePeriods.map(periodo => ({
             from: new Date(periodo.startDate).toISOString().split('T')[0],
@@ -123,15 +122,11 @@
                 }
 
                 btnSalvarReserva.disabled = false;
-                console.log(`Reserva para o quarto ${currentRoomNumber}:`);
-                console.log("Check-in:", checkinDate);
-                console.log("Check-out:", checkoutDate);
             }
         });
         checkinDate = null;
         checkoutDate = null;
         btnSalvarReserva.disabled = true;
-        console.log(datasBloqueadas);
     });
 
 
@@ -142,7 +137,6 @@
             EndDate: checkoutDate
         };
 
-        console.log('Enviando para o servidor:', JSON.stringify(reservationData));
 
 
         btnSalvarReserva.disabled = true;

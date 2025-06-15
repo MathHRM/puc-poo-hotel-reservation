@@ -2,6 +2,7 @@
 using backend.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using System.Security.Claims;
 
 namespace backend.Controllers
@@ -50,7 +51,7 @@ namespace backend.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpPost]
+        [HttpPatch]
         [Authorize]
         public async Task<IActionResult> UserReservationUpdate([FromBody] ReservationFormModel reservationData)
         {
@@ -77,7 +78,7 @@ namespace backend.Controllers
             }
         }
 
-        [ProducesResponseType(typeof(List<UserReservationDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<EditableUserReservationModel>), StatusCodes.Status200OK)]
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> UserReservations()
@@ -85,7 +86,7 @@ namespace backend.Controllers
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                return Ok(await _roomService.GetUserReservations(int.Parse(userId)));
+                return Ok(await _roomService.GetEditableUserReservations(int.Parse(userId)));
             }
             catch (Exception ex)
             {
@@ -103,13 +104,12 @@ namespace backend.Controllers
             {
                 var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 await _roomService.DeleteUserReservation(userId, reservationId);
+                return Ok();
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { ErrorMessage = ex.Message });
             }
-
-            return Ok();
         }
     }
 }

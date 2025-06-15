@@ -1,4 +1,6 @@
-@model List<backend.Models.RoomReservation>;
+@model List<Models.EditableUserReservationModel>;
+@using System.Security.Claims;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
 @{
     ViewData["Title"] = "Minhas Reservas";
 }
@@ -18,27 +20,29 @@
             }
             @foreach (var reserva in Model)
             {
-                <script>console.log(@reserva.RoomReservationId)</script>
                 <div class="col-md-6 col-lg-4 mb-4"> @* Define o tamanho do card em diferentes telas *@
                     <div class="card h-100">
                         <div class="card-header">
                             <strong>Reserva @count</strong>
                             <div class="card-body">
-                                <h5 class="card-title">Número do quarto: @reserva.RoomId</h5>
+                                <h5 class="card-title">Número do quarto: @reserva.RoomData.RoomNumber</h5>
                                 <p class="card-text">
-                                    <strong>Check-in:</strong> @reserva.StartDate.ToString("d 'de' MMMM 'de' yyyy")
+                                    <strong>Check-in:</strong> @reserva.UserReservation.StartDate.ToString("d 'de' MMMM 'de' yyyy")
                                     <br>
-                                    <strong>Check-out:</strong> @reserva.EndDate.ToString("d 'de' MMMM 'de' yyyy")
+                                    <strong>Check-out:</strong> @reserva.UserReservation.EndDate.ToString("d 'de' MMMM 'de' yyyy")
                                 </p>
                             </div>
                             <div class="card-footer text-center">
                                 <a href="#" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#meuModal"
-                                    data-room-number="@reserva.RoomId"
-                                    data-unavailable-periods='@Html.Raw(Json.Serialize(new { startDate = reserva.StartDate, endDate = reserva.EndDate }))'>Editar
+                                    data-room-number="@reserva.RoomData.RoomNumber"
+                                    data-reservation-id="@reserva.UserReservation.RoomReservationId"
+                                    data-start-date="@reserva.UserReservation.StartDate.ToString("yyyy-MM-dd")" 
+                                    data-end-date="@reserva.UserReservation.EndDate.ToString("yyyy-MM-dd")" 
+                                    data-unavailable-periods='@Json.Serialize(reserva.ConflictingPeriods)'>Editar
                                     Reserva</a>
 
-                                <a href="javascript:void(0)" class="btn btn-danger"
-                                    onclick="deleteReservation(@reserva.RoomReservationId)"><i
+                                    <a href="javascript:void(0)" class="btn btn-danger"
+                                    onclick="deleteReservation(@reserva.UserReservation.RoomReservationId)"><i
                                         class="bi bi-trash3-fill"></i></a>
                             </div>
                         </div>
@@ -104,6 +108,7 @@
     let checkinDate = null;
     let checkoutDate = null;
     let currentRoomNumber = null;
+    let currentReservationId = null;
 
     const modal = document.getElementById('meuModal');
     const modalTitle = document.getElementById('meuModalLabel');
@@ -113,15 +118,21 @@
         const button = event.relatedTarget;
 
         currentRoomNumber = button.getAttribute('data-room-number');
+        currentReservationId = button.getAttribute('data-reservation-id');
         const unavailablePeriodsJson = button.getAttribute('data-unavailable-periods');
+        const startDate = button.getAttribute('data-start-date');
+        const endDate = button.getAttribute('data-end-date');
+
+        checkinDate = startDate;
+        checkoutDate = endDate;
 
         const unavailablePeriods = JSON.parse(unavailablePeriodsJson);
         modalTitle.textContent = `Editar reserva do Quarto ${currentRoomNumber}`;
 
-        const datasBloqueadas = [{
-            from: unavailablePeriods.startDate,
-            to: unavailablePeriods.endDate
-        }];
+        const datasBloqueadas = unavailablePeriods.map(periodo => ({
+            from: new Date(periodo.startDate).toISOString().split('T')[0],
+            to: new Date(periodo.endDate).toISOString().split('T')[0]
+        }));
 
         if (calendarioInstancia) {
             calendarioInstancia.destroy();
@@ -134,11 +145,15 @@
             dateFormat: "Y-m-d",
             showMonths: 2,
             disable: datasBloqueadas,
+            defaultDate: [startDate, endDate],
             onChange: function (selectedDates, dateStr, instance) {
                 if (selectedDates.length === 2) {
                     const date = dateStr.split(' to ');
+                    
                     checkinDate = date[0];
+                    console.log('Check-in:', checkinDate);
                     checkoutDate = date[1];
+                    console.log('Check-out:', checkoutDate);
                     btnSalvarReserva.disabled = false;
                 } else {
                     btnSalvarReserva.disabled = true;
@@ -155,7 +170,8 @@
         const reservationData = {
             RoomNumber: parseInt(currentRoomNumber),
             StartDate: checkinDate,
-            EndDate: checkoutDate
+            EndDate: checkoutDate,
+            ReservationId: parseInt(currentReservationId)
         };
 
         btnSalvarReserva.disabled = true;
