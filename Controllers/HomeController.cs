@@ -47,7 +47,7 @@ namespace Controllers
         public async Task<IActionResult> UserReservation()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-             var roomsReservations = await _roomService.GetUserReservations(int.Parse(userId));
+             var roomsReservations = await _roomService.GetEditableUserReservations(int.Parse(userId));
 
             return View(roomsReservations);
         }

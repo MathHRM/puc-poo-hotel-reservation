@@ -1,4 +1,5 @@
 ﻿using backend.Models;
+using Models;
 
 namespace backend.Service.IService
 {
@@ -9,5 +10,8 @@ namespace backend.Service.IService
         Task DeleteUserReservation(int userId, int reservationId);
         Task ReserveRoom(RoomReservation reservation);
         Task UpdateUserReservation(RoomReservation reservation);
+
+        // Adicione o novo método
+        Task<List<EditableUserReservationModel>> GetEditableUserReservations(int userId);
     }
 }

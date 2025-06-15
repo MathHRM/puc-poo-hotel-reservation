@@ -1,4 +1,5 @@
 ﻿using backend.Models;
+using Models;
 
 namespace backend.Repository.IRepository
 {
@@ -11,6 +12,7 @@ namespace backend.Repository.IRepository
         Task<RoomReservation?> GetReservation(int reservationId);
         Task DeleteReservation(RoomReservation reservation);
         Task UpdateUserReservation(RoomReservation reservation);
+        Task<List<EditableUserReservationModel>> GetEditableUserReservations(int userId);
 
     }
 }

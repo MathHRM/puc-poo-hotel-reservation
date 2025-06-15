@@ -1,6 +1,7 @@
 ﻿using backend.Models;
 using backend.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using System.Data.Common;
 
 namespace backend.Repository
@@ -131,6 +132,33 @@ namespace backend.Repository
                 oldReservation.RoomId = reservation.RoomId;
 
                 await _context.SaveChangesAsync();
+            }
+            catch (DbException)
+            {
+                throw new DatabaseConnectionException();
+            }
+        }
+
+        public async Task<List<EditableUserReservationModel>> GetEditableUserReservations(int userId)
+        {
+            try
+            {
+                return await _context.RoomReservations
+                    .Where(r => r.UserId == userId)
+                    .Include(r => r.Room)
+                        .ThenInclude(room => room.Reservations)
+                    .Select(userReservation => new EditableUserReservationModel
+                    {
+                        UserReservation = userReservation,
+                        RoomData = userReservation.Room,
+                        ConflictingPeriods = userReservation.Room.Reservations
+                            .Where(otherReservation => otherReservation.RoomReservationId != userReservation.RoomReservationId)
+                            .Select(conflictingRes => new Period
+                            {
+                                StartDate = conflictingRes.StartDate.ToLocalTime(),
+                                EndDate = conflictingRes.EndDate.ToLocalTime()
+                            })
+                    }).ToListAsync();
             }
             catch (DbException)
             {

@@ -1,6 +1,7 @@
 ﻿using backend.Models;
 using backend.Repository.IRepository;
 using backend.Service.IService;
+using Models;
 
 namespace backend.Service
 {
@@ -25,6 +26,12 @@ namespace backend.Service
             await _roomRepository.DeleteReservation(reservation);
 
         }
+
+        public async Task<List<EditableUserReservationModel>> GetEditableUserReservations(int userId)
+        {
+            return await _roomRepository.GetEditableUserReservations(userId);
+        }
+
         public async Task<List<RoomDetailDto>> GetRoomsDetails()
         {
             return await _roomRepository.GetRoomsDetails();

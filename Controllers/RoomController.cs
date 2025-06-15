@@ -2,6 +2,7 @@
 using backend.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using System.Security.Claims;
 
 namespace backend.Controllers
@@ -77,7 +78,7 @@ namespace backend.Controllers
             }
         }
 
-        [ProducesResponseType(typeof(List<RoomDetailDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<EditableUserReservationModel>), StatusCodes.Status200OK)]
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> UserReservations()
@@ -85,7 +86,7 @@ namespace backend.Controllers
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                return Ok(await _roomService.GetUserReservations(int.Parse(userId)));
+                return Ok(await _roomService.GetEditableUserReservations(int.Parse(userId)));
             }
             catch (Exception ex)
             {
