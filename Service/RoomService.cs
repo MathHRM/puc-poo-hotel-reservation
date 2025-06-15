@@ -50,7 +50,6 @@ namespace backend.Service
 
         public async Task UpdateUserReservation(RoomReservation reservation)
         {
-            await ValidateReservation(reservation);
             await _roomRepository.UpdateUserReservation(reservation);
         }
 

@@ -36,7 +36,7 @@
                                 <a href="#" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#meuModal"
                                     data-room-number="@reserva.RoomData.RoomNumber"
                                     data-reservation-id="@reserva.UserReservation.RoomReservationId"
-                                    data-start-date="@reserva.UserReservation.StartDate.ToString("yyyy-MM-dd")"  @* <-- ADICIONE ESTA LINHA *@
+                                    data-start-date="@reserva.UserReservation.StartDate.ToString("yyyy-MM-dd")" 
                                     data-end-date="@reserva.UserReservation.EndDate.ToString("yyyy-MM-dd")" 
                                     data-unavailable-periods='@Json.Serialize(reserva.ConflictingPeriods)'>Editar
                                     Reserva</a>
@@ -120,11 +120,11 @@
         currentRoomNumber = button.getAttribute('data-room-number');
         currentReservationId = button.getAttribute('data-reservation-id');
         const unavailablePeriodsJson = button.getAttribute('data-unavailable-periods');
-        const startDate = button.getAttribute('data-start-date'); // <-- 1. CAPTURE A DATA DE INÍCIO
-        const endDate = button.getAttribute('data-end-date'); // <-- 2. CAPTURE A DATA DE FIM
+        const startDate = button.getAttribute('data-start-date');
+        const endDate = button.getAttribute('data-end-date');
 
-         checkinDate = startDate; // <-- 2. DEFINA O CHECK-IN INICIAL
-    checkoutDate = endDate;
+        checkinDate = startDate;
+        checkoutDate = endDate;
 
         const unavailablePeriods = JSON.parse(unavailablePeriodsJson);
         modalTitle.textContent = `Editar reserva do Quarto ${currentRoomNumber}`;
@@ -149,8 +149,11 @@
             onChange: function (selectedDates, dateStr, instance) {
                 if (selectedDates.length === 2) {
                     const date = dateStr.split(' to ');
+                    
                     checkinDate = date[0];
+                    console.log('Check-in:', checkinDate);
                     checkoutDate = date[1];
+                    console.log('Check-out:', checkoutDate);
                     btnSalvarReserva.disabled = false;
                 } else {
                     btnSalvarReserva.disabled = true;

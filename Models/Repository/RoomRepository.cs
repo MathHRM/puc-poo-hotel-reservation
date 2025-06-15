@@ -44,8 +44,8 @@ namespace backend.Repository
                     Room = room,
                     UnavailablePeriods = room.Reservations.Select(reservation => new Period
                     {
-                        StartDate = reservation.StartDate.ToLocalTime(),
-                        EndDate = reservation.EndDate.ToLocalTime()
+                        StartDate = reservation.StartDate,
+                        EndDate = reservation.EndDate
                     })
                 }).ToListAsync();
             }
@@ -80,8 +80,8 @@ namespace backend.Repository
                         Room = reservation.Room,
                         UnavailablePeriods = reservation.Room.Reservations.Select(r => new Period
                         {
-                            StartDate = r.StartDate.ToLocalTime(),
-                            EndDate = r.EndDate.ToLocalTime()
+                            StartDate = r.StartDate,
+                            EndDate = r.EndDate
                         })
                     }).ToListAsync();
             }
@@ -155,8 +155,8 @@ namespace backend.Repository
                             .Where(otherReservation => otherReservation.RoomReservationId != userReservation.RoomReservationId)
                             .Select(conflictingRes => new Period
                             {
-                                StartDate = conflictingRes.StartDate.ToLocalTime(),
-                                EndDate = conflictingRes.EndDate.ToLocalTime()
+                                StartDate = conflictingRes.StartDate,
+                                EndDate = conflictingRes.EndDate
                             })
                     }).ToListAsync();
             }
